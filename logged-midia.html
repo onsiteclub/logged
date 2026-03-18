@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logged Mídia — Ottawa</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #080808;
+  --bg2: #111111;
+  --bg3: #181818;
+  --white: #f0ece4;
+  --muted: rgba(240,236,228,0.35);
+  --faint: rgba(240,236,228,0.1);
+  --gold: #b8976a;
+  --gold-faint: rgba(184,151,106,0.12);
+  --border: rgba(240,236,228,0.07);
+  --border-gold: rgba(184,151,106,0.2);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CURSOR */
+.cursor {
+  width: 8px; height: 8px; background: var(--gold);
+  border-radius: 50%; position: fixed; pointer-events: none;
+  z-index: 9999; transform: translate(-50%, -50%);
+  transition: transform 0.1s; mix-blend-mode: difference;
+}
+.cursor-ring {
+  width: 36px; height: 36px; border: 1px solid rgba(184,151,106,0.4);
+  border-radius: 50%; position: fixed; pointer-events: none;
+  z-index: 9998; transform: translate(-50%, -50%);
+  transition: all 0.15s ease-out;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 28px 64px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(8,8,8,0.92);
+  backdrop-filter: blur(20px);
+}
+.nav-logo {
+  display: flex; flex-direction: column; gap: 2px; text-decoration: none;
+}
+.nav-logo-main {
+  font-family: 'Bebas Neue', cursive; font-size: 20px;
+  letter-spacing: 0.25em; color: var(--white); line-height: 1;
+}
+.nav-logo-sub {
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 300;
+  letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold);
+}
+.nav-links { display: flex; gap: 40px; list-style: none; }
+.nav-links a {
+  font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 300;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none; transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-group {
+  font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 300;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold);
+  border: 1px solid var(--border-gold); padding: 8px 20px;
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 0 64px 80px;
+  position: relative; overflow: hidden;
+}
+
+.hero-bg-num {
+  position: absolute; right: -40px; top: 50%;
+  transform: translateY(-60%);
+  font-family: 'Bebas Neue', cursive; font-size: 480px;
+  color: rgba(240,236,228,0.02); letter-spacing: -0.05em;
+  user-select: none; line-height: 1;
+}
+
+.hero-top {
+  position: absolute; top: 120px; right: 64px; left: 64px;
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.hero-top-tag {
+  font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 300;
+  letter-spacing: 0.35em; text-transform: uppercase; color: var(--muted);
+}
+.hero-top-line {
+  display: flex; align-items: center; gap: 16px;
+  font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 300;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold);
+}
+.hero-top-line::before {
+  content: ''; display: block; width: 48px; height: 1px; background: var(--gold); opacity: 0.4;
+}
+
+.hero-content { position: relative; z-index: 2; }
+
+.hero-eyebrow {
+  font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 300;
+  letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold);
+  margin-bottom: 32px; display: flex; align-items: center; gap: 16px;
+}
+.hero-eyebrow::before { content: ''; display: block; width: 40px; height: 1px; background: var(--gold); }
+
+.hero-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(64px, 8vw, 120px);
+  font-weight: 400; line-height: 0.9;
+  letter-spacing: -0.02em; color: var(--white);
+  max-width: 900px; margin-bottom: 60px;
+}
+.hero-headline em { font-style: italic; color: var(--gold); }
+
+.hero-bottom {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  border-top: 1px solid var(--border); padding-top: 32px;
+}
+.hero-desc {
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300;
+  line-height: 1.8; color: var(--muted); max-width: 460px;
+}
+.hero-scroll {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 300;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted);
+}
+.scroll-line { width: 1px; height: 60px; background: var(--border-gold); }
+
+/* MARQUEE */
+.marquee {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 18px 0; overflow: hidden; background: var(--bg2);
+}
+.marquee-inner {
+  display: flex; gap: 0; white-space: nowrap;
+  animation: marqueeAnim 30s linear infinite;
+}
+.marquee-item {
+  font-family: 'Bebas Neue', cursive; font-size: 14px;
+  letter-spacing: 0.3em; color: var(--muted); flex-shrink: 0;
+  padding: 0 32px; border-right: 1px solid var(--border);
+}
+.marquee-item.gold { color: var(--gold); }
+@keyframes marqueeAnim { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* SECTION BASE */
+.section { padding: 120px 64px; border-top: 1px solid var(--border); }
+
+.label {
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 500;
+  letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold);
+  margin-bottom: 64px; display: flex; align-items: center; gap: 20px;
+}
+.label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* MANIFESTO */
+.manifesto {
+  background: var(--bg2); padding: 120px 64px;
+  border-top: 1px solid var(--border);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 120px; align-items: center;
+}
+.manifesto-left {
+  font-family: 'Playfair Display', serif; font-size: clamp(36px, 4vw, 56px);
+  font-weight: 400; line-height: 1.15; color: var(--white); letter-spacing: -0.01em;
+}
+.manifesto-left em { font-style: italic; color: var(--gold); }
+.manifesto-right { display: flex; flex-direction: column; gap: 28px; }
+.manifesto-p {
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300;
+  line-height: 1.9; color: var(--muted);
+}
+.manifesto-stat {
+  border-top: 1px solid var(--border); padding-top: 28px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+}
+.mstat-num {
+  font-family: 'Playfair Display', serif; font-size: 36px;
+  font-style: italic; color: var(--gold); line-height: 1;
+}
+.mstat-label {
+  font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 300;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 6px;
+}
+
+/* DISCIPLINES */
+.disciplines-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
+.discipline-card {
+  background: var(--bg); padding: 64px 56px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  min-height: 340px; position: relative; overflow: hidden;
+  transition: background 0.4s; cursor: default;
+}
+.discipline-card:hover { background: var(--bg3); }
+.discipline-card:hover .disc-num { opacity: 1; }
+.discipline-card:hover .disc-line { width: 100%; }
+.disc-line {
+  position: absolute; top: 0; left: 0; height: 1px;
+  background: var(--gold); width: 0; transition: width 0.6s;
+}
+.disc-num {
+  font-family: 'Bebas Neue', cursive; font-size: 120px;
+  color: rgba(240,236,228,0.03); position: absolute;
+  right: 32px; bottom: -10px; line-height: 1;
+  opacity: 0; transition: opacity 0.4s; user-select: none;
+}
+.disc-header { display: flex; align-items: flex-start; justify-content: space-between; }
+.disc-index {
+  font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 300;
+  letter-spacing: 0.3em; color: var(--gold);
+}
+.disc-tag {
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 300;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
+  border: 1px solid var(--border); padding: 4px 12px;
+}
+.disc-title {
+  font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 400;
+  color: var(--white); line-height: 1.1; margin: 32px 0 20px;
+}
+.disc-title em { font-style: italic; color: var(--gold); }
+.disc-desc {
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 300;
+  line-height: 1.8; color: var(--muted); max-width: 380px;
+}
+.disc-items {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-top: 32px;
+}
+.disc-item {
+  font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 300;
+  letter-spacing: 0.12em; color: rgba(184,151,106,0.55);
+  border: 1px solid rgba(184,151,106,0.15); padding: 5px 14px;
+}
+
+/* CLIENTS / GROUP */
+.group-section { background: var(--bg2); padding: 120px 64px; border-top: 1px solid var(--border); }
+.group-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: var(--border); margin-top: 0;
+}
+.group-card {
+  background: var(--bg2); padding: 48px 40px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  min-height: 240px; transition: background 0.3s; cursor: default;
+}
+.group-card:hover { background: var(--bg3); }
+.group-card:hover .gc-arrow { transform: translateX(4px); opacity: 1; }
+.gc-logo {
+  font-family: 'Bebas Neue', cursive; font-size: 22px;
+  letter-spacing: 0.2em; color: var(--white); margin-bottom: 8px;
+}
+.gc-sector {
+  font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 300;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold);
+  margin-bottom: 20px;
+}
+.gc-desc {
+  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 300;
+  line-height: 1.7; color: var(--muted); flex: 1;
+}
+.gc-services {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px;
+}
+.gc-srv {
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 300;
+  letter-spacing: 0.1em; color: rgba(240,236,228,0.25);
+  border: 1px solid var(--border); padding: 3px 10px;
+}
+.gc-arrow {
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); margin-top: 24px; display: inline-block;
+  transition: all 0.2s; opacity: 0;
+}
+
+/* WORK / CASES */
+.work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.work-card {
+  aspect-ratio: 16/10; background: var(--bg3);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 40px; position: relative; overflow: hidden;
+  cursor: default; transition: background 0.4s;
+}
+.work-card:hover { background: #1f1f1f; }
+.work-card:hover .wc-overlay { opacity: 1; }
+.work-card:hover .wc-num { opacity: 0.06; transform: scale(1.05); }
+.wc-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(184,151,106,0.04) 0%, transparent 100%);
+  opacity: 0; transition: opacity 0.4s;
+}
+.wc-num {
+  position: absolute; right: -20px; top: -20px;
+  font-family: 'Bebas Neue', cursive; font-size: 200px;
+  color: var(--white); opacity: 0.02; line-height: 1;
+  transition: all 0.4s; user-select: none;
+}
+.wc-tag {
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 300;
+  letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold);
+  margin-bottom: 12px; display: block; position: relative; z-index: 1;
+}
+.wc-title {
+  font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 400;
+  color: var(--white); line-height: 1.2; position: relative; z-index: 1;
+}
+.wc-title em { font-style: italic; color: var(--gold); }
+.wc-sub {
+  font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 300;
+  color: var(--muted); margin-top: 8px; position: relative; z-index: 1;
+  letter-spacing: 0.05em;
+}
+
+/* PHILOSOPHY */
+.philosophy { padding: 120px 64px; border-top: 1px solid var(--border); }
+.philosophy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-top: 64px; }
+.phil-card {
+  background: var(--bg); padding: 52px 44px;
+  border-top: 1px solid transparent; transition: all 0.3s; cursor: default;
+}
+.phil-card:hover { background: var(--bg2); border-top-color: var(--gold); }
+.phil-num {
+  font-family: 'Playfair Display', serif; font-size: 48px;
+  font-style: italic; font-weight: 400; color: rgba(184,151,106,0.2);
+  line-height: 1; margin-bottom: 24px;
+}
+.phil-title {
+  font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 400;
+  color: var(--white); margin-bottom: 16px; line-height: 1.2;
+}
+.phil-desc {
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 300;
+  line-height: 1.8; color: var(--muted);
+}
+
+/* CONTACT */
+.contact {
+  background: var(--bg2); padding: 120px 64px;
+  border-top: 1px solid var(--border);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 120px; align-items: start;
+}
+.contact-left h2 {
+  font-family: 'Playfair Display', serif; font-size: clamp(40px, 5vw, 64px);
+  font-weight: 400; line-height: 0.95; color: var(--white); margin-bottom: 36px;
+}
+.contact-left h2 em { font-style: italic; color: var(--gold); display: block; }
+.contact-left p {
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300;
+  line-height: 1.8; color: var(--muted); margin-bottom: 48px; max-width: 380px;
+}
+.contact-detail {
+  display: flex; flex-direction: column; gap: 16px; margin-top: 48px;
+}
+.cd-item {
+  display: flex; gap: 16px; align-items: baseline;
+}
+.cd-label {
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 500;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold);
+  min-width: 80px;
+}
+.cd-val {
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 300;
+  color: var(--muted);
+}
+.contact-form { display: flex; flex-direction: column; gap: 2px; }
+.form-field {
+  background: rgba(240,236,228,0.03);
+  border: 1px solid var(--border); color: var(--white);
+  padding: 18px 20px; font-family: 'DM Sans', sans-serif; font-size: 13px;
+  font-weight: 300; outline: none; transition: border-color 0.3s;
+  width: 100%; resize: none; appearance: none;
+  letter-spacing: 0.02em;
+}
+.form-field:focus { border-color: var(--gold); }
+.form-field::placeholder { color: rgba(240,236,228,0.2); }
+.form-field option { background: var(--bg2); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.form-submit {
+  margin-top: 2px; background: var(--gold); color: var(--bg);
+  padding: 18px 40px; font-family: 'DM Sans', sans-serif;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.25em;
+  text-transform: uppercase; border: none; cursor: none;
+  transition: all 0.3s; width: 100%;
+}
+.form-submit:hover { background: var(--white); }
+
+/* FOOTER */
+footer {
+  background: var(--bg); padding: 64px;
+  border-top: 1px solid var(--border);
+  display: grid; grid-template-columns: 2fr 1fr 1fr;
+  gap: 80px;
+}
+.footer-brand { display: flex; flex-direction: column; gap: 4px; }
+.footer-logo-main {
+  font-family: 'Bebas Neue', cursive; font-size: 28px;
+  letter-spacing: 0.25em; color: var(--white);
+}
+.footer-logo-sub {
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 300;
+  letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold);
+}
+.footer-tagline {
+  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 300;
+  color: var(--muted); line-height: 1.7; margin-top: 20px; max-width: 280px;
+}
+.footer-col h4 {
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 500;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold);
+  margin-bottom: 24px;
+}
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.footer-col a {
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 300;
+  color: var(--muted); text-decoration: none; transition: color 0.2s;
+  letter-spacing: 0.02em;
+}
+.footer-col a:hover { color: var(--white); }
+.footer-bottom {
+  background: var(--bg); padding: 20px 64px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-copy {
+  font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 300;
+  letter-spacing: 0.1em; color: rgba(240,236,228,0.15);
+}
+.footer-group {
+  font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 300;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(184,151,106,0.35);
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  nav { padding: 20px 24px; }
+  .nav-links { display: none; }
+  .hero { padding: 0 24px 60px; }
+  .hero-top { left: 24px; right: 24px; }
+  .section { padding: 80px 24px; }
+  .manifesto { grid-template-columns: 1fr; gap: 48px; padding: 80px 24px; }
+  .disciplines-grid { grid-template-columns: 1fr; }
+  .group-section { padding: 80px 24px; }
+  .group-grid { grid-template-columns: 1fr 1fr; }
+  .work-grid { grid-template-columns: 1fr; }
+  .philosophy-grid { grid-template-columns: 1fr; }
+  .philosophy { padding: 80px 24px; }
+  .contact { grid-template-columns: 1fr; gap: 48px; padding: 80px 24px; }
+  .form-row { grid-template-columns: 1fr; }
+  footer { grid-template-columns: 1fr 1fr; gap: 40px; padding: 48px 24px; }
+  .footer-bottom { flex-direction: column; gap: 8px; padding: 20px 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-main">LOGGED</div>
+    <div class="nav-logo-sub">Mídia</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#disciplines">Disciplines</a></li>
+    <li><a href="#group">The Group</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#philosophy">Philosophy</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-group">Shabba Holdings</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg-num">LM</div>
+
+  <div class="hero-top">
+    <div class="hero-top-tag">Ottawa, Canada · Est. 2025</div>
+    <div class="hero-top-line">Internal Media Studio</div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Logged Mídia</div>
+    <h1 class="hero-headline">
+      The digital<br>
+      voice of<br>
+      <em>the group.</em>
+    </h1>
+    <div class="hero-bottom">
+      <p class="hero-desc">
+        Estúdio de mídia interno do ecossistema Shabba. Branding, social media, web design e gestão de creators — tudo convergindo para construir a presença digital das marcas do grupo.
+      </p>
+      <div class="hero-scroll">
+        <div class="scroll-line"></div>
+        Scroll
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-inner">
+    <span class="marquee-item gold">LOGGED MÍDIA</span>
+    <span class="marquee-item">BRANDING</span>
+    <span class="marquee-item">SOCIAL MEDIA</span>
+    <span class="marquee-item">WEB DESIGN</span>
+    <span class="marquee-item gold">CREATORS</span>
+    <span class="marquee-item">CONTENT</span>
+    <span class="marquee-item">STRATEGY</span>
+    <span class="marquee-item">IDENTITY</span>
+    <span class="marquee-item gold">SHABBA HOLDINGS</span>
+    <span class="marquee-item">OTTAWA CA</span>
+    <span class="marquee-item">LOGGED MÍDIA</span>
+    <span class="marquee-item">BRANDING</span>
+    <span class="marquee-item">SOCIAL MEDIA</span>
+    <span class="marquee-item">WEB DESIGN</span>
+    <span class="marquee-item gold">CREATORS</span>
+    <span class="marquee-item">CONTENT</span>
+    <span class="marquee-item">STRATEGY</span>
+    <span class="marquee-item">IDENTITY</span>
+    <span class="marquee-item gold">SHABBA HOLDINGS</span>
+    <span class="marquee-item">OTTAWA CA</span>
+  </div>
+</div>
+
+<!-- MANIFESTO -->
+<div class="manifesto">
+  <div class="manifesto-left">
+    No mundo de hoje,<br>
+    presença digital<br>
+    não é <em>opcional.</em><br>
+    É existência.
+  </div>
+  <div class="manifesto-right">
+    <p class="manifesto-p">
+      Uma empresa que não existe digitalmente simplesmente não existe. Em 2025, o primeiro ponto de contato entre uma marca e seu público não é mais a loja, o escritório ou o produto — é o feed, o site, o story.
+    </p>
+    <p class="manifesto-p">
+      A Logged Mídia foi criada para garantir que cada empresa do ecossistema Shabba ocupe seu espaço digital com clareza, consistência e intenção. Não terceirizamos nossa voz. Construímos internamente.
+    </p>
+    <div class="manifesto-stat">
+      <div>
+        <div class="mstat-num">4+</div>
+        <div class="mstat-label">Marcas do grupo</div>
+      </div>
+      <div>
+        <div class="mstat-num">100%</div>
+        <div class="mstat-label">Interno</div>
+      </div>
+      <div>
+        <div class="mstat-num">24/7</div>
+        <div class="mstat-label">Presença ativa</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DISCIPLINES -->
+<section class="section" id="disciplines">
+  <div class="label">What We Do</div>
+  <div class="disciplines-grid">
+    <div class="discipline-card">
+      <div class="disc-line"></div>
+      <div class="disc-num">01</div>
+      <div>
+        <div class="disc-header">
+          <div class="disc-index">01 —</div>
+          <div class="disc-tag">Foundation</div>
+        </div>
+        <div class="disc-title">Branding &<br><em>Identity</em></div>
+        <div class="disc-desc">Construção de identidade visual para cada marca do grupo. Logo, paleta, tipografia, tom de voz e guia de marca completo. A base de tudo.</div>
+        <div class="disc-items">
+          <span class="disc-item">Logo Design</span>
+          <span class="disc-item">Brand Guidelines</span>
+          <span class="disc-item">Visual Identity</span>
+          <span class="disc-item">Tone of Voice</span>
+          <span class="disc-item">Brand Strategy</span>
+        </div>
+      </div>
+    </div>
+    <div class="discipline-card">
+      <div class="disc-line"></div>
+      <div class="disc-num">02</div>
+      <div>
+        <div class="disc-header">
+          <div class="disc-index">02 —</div>
+          <div class="disc-tag">Presence</div>
+        </div>
+        <div class="disc-title">Social Media<br><em>& Content</em></div>
+        <div class="disc-desc">Gestão estratégica das redes sociais do grupo. Conteúdo que constrói comunidade, não só seguidores. Do planejamento à publicação.</div>
+        <div class="disc-items">
+          <span class="disc-item">Content Strategy</span>
+          <span class="disc-item">Instagram / TikTok</span>
+          <span class="disc-item">Copywriting</span>
+          <span class="disc-item">Visual Content</span>
+          <span class="disc-item">Analytics</span>
+        </div>
+      </div>
+    </div>
+    <div class="discipline-card">
+      <div class="disc-line"></div>
+      <div class="disc-num">03</div>
+      <div>
+        <div class="disc-header">
+          <div class="disc-index">03 —</div>
+          <div class="disc-tag">Digital</div>
+        </div>
+        <div class="disc-title">Web Design<br><em>& Development</em></div>
+        <div class="disc-desc">Sites, landing pages e e-commerces para as marcas do grupo. Design com propósito. Performance real. Código limpo.</div>
+        <div class="disc-items">
+          <span class="disc-item">UI / UX Design</span>
+          <span class="disc-item">Next.js / React</span>
+          <span class="disc-item">E-commerce</span>
+          <span class="disc-item">Landing Pages</span>
+          <span class="disc-item">SEO</span>
+        </div>
+      </div>
+    </div>
+    <div class="discipline-card">
+      <div class="disc-line"></div>
+      <div class="disc-num">04</div>
+      <div>
+        <div class="disc-header">
+          <div class="disc-index">04 —</div>
+          <div class="disc-tag">Community</div>
+        </div>
+        <div class="disc-title">Creator<br><em>Management</em></div>
+        <div class="disc-desc">Desenvolvimento e gestão de creators dentro do ecossistema Shabba. Voz, audiência e monetização. Acesso mediante convite.</div>
+        <div class="disc-items">
+          <span class="disc-item">Talent Development</span>
+          <span class="disc-item">Content Direction</span>
+          <span class="disc-item">Partnerships</span>
+          <span class="disc-item">Monetization</span>
+          <span class="disc-item">By Invite Only</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE GROUP -->
+<div class="group-section" id="group">
+  <div class="label">The Group — Shabba Holdings</div>
+  <div class="group-grid">
+    <div class="group-card">
+      <div>
+        <div class="gc-logo">SHABBA</div>
+        <div class="gc-sector">Holding</div>
+        <div class="gc-desc">A holding que une todas as marcas. Plataforma digital, estratégia e direção criativa do ecossistema inteiro.</div>
+        <div class="gc-services">
+          <span class="gc-srv">Strategy</span>
+          <span class="gc-srv">Direction</span>
+          <span class="gc-srv">Identity</span>
+        </div>
+      </div>
+      <div class="gc-arrow">View →</div>
+    </div>
+    <div class="group-card">
+      <div>
+        <div class="gc-logo">ONSITE CLUB</div>
+        <div class="gc-sector">Tech / Apps</div>
+        <div class="gc-desc">Ecossistema de tecnologia para a construção. Apps, dados e plataforma de gestão para workers e contractors.</div>
+        <div class="gc-services">
+          <span class="gc-srv">Social Media</span>
+          <span class="gc-srv">Web</span>
+          <span class="gc-srv">Content</span>
+        </div>
+      </div>
+      <div class="gc-arrow">View →</div>
+    </div>
+    <div class="group-card">
+      <div>
+        <div class="gc-logo">WEARE</div>
+        <div class="gc-sector">Merch / Print</div>
+        <div class="gc-desc">Camisetas, uniformes e material de divulgação. Do canteiro de obras ao evento corporativo.</div>
+        <div class="gc-services">
+          <span class="gc-srv">Branding</span>
+          <span class="gc-srv">Social</span>
+          <span class="gc-srv">E-commerce</span>
+        </div>
+      </div>
+      <div class="gc-arrow">View →</div>
+    </div>
+    <div class="group-card">
+      <div>
+        <div class="gc-logo">BEARING</div>
+        <div class="gc-sector">Construction</div>
+        <div class="gc-desc">Carpintaria e construção. A raiz do grupo — onde tudo começou e de onde vem a credibilidade real.</div>
+        <div class="gc-services">
+          <span class="gc-srv">Identity</span>
+          <span class="gc-srv">Web</span>
+          <span class="gc-srv">Content</span>
+        </div>
+      </div>
+      <div class="gc-arrow">View →</div>
+    </div>
+  </div>
+</div>
+
+<!-- WORK -->
+<section class="section" id="work">
+  <div class="label">Selected Work</div>
+  <div class="work-grid">
+    <div class="work-card">
+      <div class="wc-num">01</div>
+      <div class="wc-overlay"></div>
+      <span class="wc-tag">Branding · OnSite Club</span>
+      <div class="wc-title">Identity for the<br><em>construction worker</em></div>
+      <div class="wc-sub">Brand system · Visual identity · Social media · Web</div>
+    </div>
+    <div class="work-card">
+      <div class="wc-num">02</div>
+      <div class="wc-overlay"></div>
+      <span class="wc-tag">E-commerce · WeAre</span>
+      <div class="wc-title">Merch store that<br><em>speaks first</em></div>
+      <div class="wc-sub">Next.js · Stripe · Supabase · Full brand</div>
+    </div>
+    <div class="work-card">
+      <div class="wc-num">03</div>
+      <div class="wc-overlay"></div>
+      <span class="wc-tag">Content · Shabba</span>
+      <div class="wc-title">The founder's<br><em>digital presence</em></div>
+      <div class="wc-sub">Editorial · Social · Photography · Web</div>
+    </div>
+    <div class="work-card">
+      <div class="wc-num">04</div>
+      <div class="wc-overlay"></div>
+      <span class="wc-tag">Creators · Network</span>
+      <div class="wc-title">Building voices<br><em>inside the group</em></div>
+      <div class="wc-sub">Talent · Content direction · Distribution</div>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<div class="philosophy" id="philosophy">
+  <div class="label">Our Philosophy</div>
+  <div class="philosophy-grid">
+    <div class="phil-card">
+      <div class="phil-num">I</div>
+      <div class="phil-title">Internal over outsourced</div>
+      <div class="phil-desc">A voz de uma marca não pode ser terceirizada. Quando você terceiriza sua comunicação, terceiriza sua identidade. A Logged Mídia existe para que o grupo fale com sua própria voz — sempre.</div>
+    </div>
+    <div class="phil-card">
+      <div class="phil-num">II</div>
+      <div class="phil-title">Consistency builds trust</div>
+      <div class="phil-desc">Uma única aparição no feed não constrói nada. Presença digital é uma prática diária, uma linguagem consistente que ao longo do tempo constrói autoridade, confiança e comunidade.</div>
+    </div>
+    <div class="phil-card">
+      <div class="phil-num">III</div>
+      <div class="phil-title">Data informs, culture drives</div>
+      <div class="phil-desc">Métricas dizem o que aconteceu. Cultura diz o que vai acontecer. Trabalhamos com os dois — mas é a cultura do grupo, sua raiz e sua história, que define cada decisão criativa.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="contact" id="contact">
+  <div class="contact-left">
+    <div class="label" style="margin-bottom:32px;">Get in Touch</div>
+    <h2>
+      Let's talk
+      <em>seriously.</em>
+    </h2>
+    <p>Logged Mídia trabalha exclusivamente com as marcas do ecossistema Shabba. Se você chegou até aqui, provavelmente já sabe quem somos.</p>
+    <div class="contact-detail">
+      <div class="cd-item">
+        <span class="cd-label">Email</span>
+        <span class="cd-val">hello@logged.ca</span>
+      </div>
+      <div class="cd-item">
+        <span class="cd-label">Location</span>
+        <span class="cd-val">Ottawa, Ontario, Canada</span>
+      </div>
+      <div class="cd-item">
+        <span class="cd-label">Group</span>
+        <span class="cd-val">Shabba Holdings</span>
+      </div>
+      <div class="cd-item">
+        <span class="cd-label">Languages</span>
+        <span class="cd-val">EN · PT · ES</span>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="contact-form">
+      <div class="form-row">
+        <input class="form-field" type="text" placeholder="Your name">
+        <input class="form-field" type="text" placeholder="Company / Brand">
+      </div>
+      <input class="form-field" type="email" placeholder="Email">
+      <select class="form-field">
+        <option value="" disabled selected>Subject</option>
+        <option>Branding / Identity</option>
+        <option>Social Media</option>
+        <option>Web Design</option>
+        <option>Creator Management</option>
+        <option>Full Partnership</option>
+        <option>Other</option>
+      </select>
+      <textarea class="form-field" rows="5" placeholder="Tell us about your brand and what you need..."></textarea>
+      <button class="form-submit">Send Message</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand">
+      <div class="footer-logo-main">LOGGED</div>
+      <div class="footer-logo-sub">Mídia</div>
+    </div>
+    <p class="footer-tagline">
+      Estúdio de mídia interno do ecossistema Shabba. Branding, social media, web e creators — construindo a presença digital do grupo.
+    </p>
+  </div>
+  <div class="footer-col">
+    <h4>Disciplines</h4>
+    <ul>
+      <li><a href="#disciplines">Branding</a></li>
+      <li><a href="#disciplines">Social Media</a></li>
+      <li><a href="#disciplines">Web Design</a></li>
+      <li><a href="#disciplines">Creator Mgmt</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>The Group</h4>
+    <ul>
+      <li><a href="#group">Shabba</a></li>
+      <li><a href="#group">OnSite Club</a></li>
+      <li><a href="#group">WeAre</a></li>
+      <li><a href="#group">Bearing</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <div class="footer-copy">© 2025 Logged Mídia · Ottawa, Ontario</div>
+  <div class="footer-group">Part of Shabba Holdings</div>
+</div>
+
+<script>
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+
+function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+</script>
+</body>
+</html>
